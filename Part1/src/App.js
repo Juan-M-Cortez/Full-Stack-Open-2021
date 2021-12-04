@@ -1,19 +1,42 @@
 import React, { useState } from "react";
 
-const Statistics =(props) => {
-  //Just Add
-  //Just Display
+const Button = ({handleClick, text}) => {
+  return( 
+    <button onClick={handleClick}>{text}</button>
+  )
+}
+
+const StatisticLine = (Statistics) => {
   return(
     <div>
-      <h1>Statistics</h1>
-      <p>good {props.good}</p>
-      <p>neutral {props.neutral}</p>
-      <p>bad {props.bad}</p>
+      <p>{Statistics.text} {Statistics.value}</p>
     </div>
   )
-} 
+}
 
 
+const Statistics =(props) => {
+  const total=props.good + props.neutral + props.bad 
+  //Just Display
+  if(total > 0)
+    return(
+      <div>
+        <h1>Statistics</h1>
+        <StatisticLine text="good" value={props.good}/>
+        <StatisticLine text='neutral' value={props.neutral}/>
+        <StatisticLine text='bad' value={props.bad}/>
+        <StatisticLine text='total' value={props.neutral}/>
+        <StatisticLine text='average' value={props.average}/>
+        <StatisticLine text='positive' value={props.positive}/>
+      </div>
+    )
+  return (
+    <div>
+      <p>No feedback given</p>
+    </div>
+  )
+}
+  
 
 
 const App = () => {
@@ -21,21 +44,21 @@ const App = () => {
   const [good, setGood] = useState(0)    
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+ 
+  const handleGood = () => {setGood(good + 1)}
+  const handleNeutral = () => {setNeutral(neutral + 1)}
+  const handleBad = () => {setBad(bad + 1)}
 
   return (
     <div>
       <h1>Give Feedback</h1>
-      <button onClick={() => setGood(good + 1)}>good</button>
-      <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
-      <button onClick={() => setBad(bad + 1)}>bad</button>
-      <p>good TESTING: {good}{console.log(good)}</p>
-      <Statistics good={good} neutral={neutral} bad={bad}/>
-
+      <Button handleClick={handleGood} text='good'/>
+      <Button handleClick={handleNeutral} text='neutral'/>
+      <Button handleClick={handleBad} text='bad'/>
+      <Statistics good={good} neutral={neutral} bad={bad} total={good + neutral + bad} 
+      average={(good - bad) / (good + neutral + bad)} positive={(good / (good + neutral + bad))* 100 + '%'}/>   
     </div>
   )
 }
-
-
-
 
 export default App;
